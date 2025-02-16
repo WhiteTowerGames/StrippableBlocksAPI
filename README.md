@@ -83,7 +83,3 @@ This project is licensed under the CC0-1.0 License. For more details, refer to t
 ## Contributing
 
 Contributions are welcome! If you encounter any issues or have suggestions, please open an issue or submit a pull request on the [GitHub repository](https://github.com/WhiteTowerGames/StrippableBlocksAPI).
-
----
-
-Feel free to adjust any sections as needed. Let me know if you require further modifications! 🚀 
