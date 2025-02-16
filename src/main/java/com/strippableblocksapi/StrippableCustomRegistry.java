@@ -1,6 +1,6 @@
 package com.strippableblocksapi;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +13,7 @@ public class StrippableCustomRegistry {
         STRIPPABLES.put(input, output);
     }
 
-    public static Block getStripppedResult(Block input){
+    public static Block getStrippedResult(Block input){
         return STRIPPABLES.get(input);
     }
 
