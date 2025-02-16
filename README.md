@@ -41,7 +41,7 @@ To include **StrippableBlocks API** in your Fabric mod:
 
 ### Bundled with Mods
 
-If you're using a mod like **Pedestals** that already includes **StrippableBlocks API**, no separate installation is required.
+If you're using a mod like [**Pedestals**](https://www.curseforge.com/minecraft/mc-mods/pedestals-display-your-items) that already includes **StrippableBlocks API**, no separate installation is required.
 
 ## Usage
 
