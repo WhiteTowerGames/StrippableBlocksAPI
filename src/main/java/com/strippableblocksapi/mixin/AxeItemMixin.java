@@ -29,7 +29,7 @@ public class AxeItemMixin {
 		BlockPos pos = context.getBlockPos();
 		Block block = world.getBlockState(pos).getBlock();
 
-		Block strippedBlock = StrippableCustomRegistry.getStripppedResult(block);
+		Block strippedBlock = StrippableCustomRegistry.getStrippedResult(block);
 
 		if (strippedBlock != null){
 			world.setBlockState(pos, strippedBlock.getDefaultState());
