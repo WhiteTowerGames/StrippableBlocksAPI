@@ -2,7 +2,6 @@ package com.strippableblocksapi.mixin;
 
 import com.strippableblocksapi.StrippableBlocksAPI;
 import com.strippableblocksapi.StrippableCustomRegistry;
-import net.chris.pedestals.block.entity.PedestalBlockEntity;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
