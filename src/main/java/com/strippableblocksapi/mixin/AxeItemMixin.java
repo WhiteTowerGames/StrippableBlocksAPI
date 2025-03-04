@@ -2,7 +2,6 @@ package com.strippableblocksapi.mixin;
 
 import com.strippableblocksapi.StrippableBlocksAPI;
 import com.strippableblocksapi.StrippableCustomRegistry;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.AxeItem;
@@ -42,22 +41,9 @@ public class AxeItemMixin {
 		if (strippedBlock != null){
 
 
-            if (FabricLoader.getInstance().isModLoaded("pedestals")) {
+            if (StrippableBlocksAPI.isPedestalsLoaded) {
 
 				BlockEntity blockEntity = world.getBlockEntity(pos);
-
-//                try {
-//					BlockEntity blockEntity = world.getBlockEntity(pos);
-//                    if (blockEntity instanceof PedestalBlockEntity pedestalBlockEntity) {
-//                        ItemStack currentItem = pedestalBlockEntity.getStoredItem();
-//                        world.setBlockState(pos, strippedBlock.getDefaultState(), 3);
-//                        PedestalBlockEntity newPedestalBlockEntity = (PedestalBlockEntity) world.getBlockEntity(pos);
-//                        assert newPedestalBlockEntity != null;
-//                        newPedestalBlockEntity.setStoredItem(currentItem);
-//                    }
-//                } catch (Exception e) {
-//                    throw new RuntimeException(e);
-//                }
 				try {
 					// Use reflection to check for the class existence
 					Class<?> pedestalClass = Class.forName("com.strippableblocksapi.pedestals.PedestalBlockEntity");
