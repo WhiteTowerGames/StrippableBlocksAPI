@@ -2,7 +2,6 @@ package com.strippableblocksapi.mixin;
 
 import com.strippableblocksapi.StrippableBlocksAPI;
 import com.strippableblocksapi.StrippableCustomRegistry;
-import net.chris.pedestals.block.entity.PedestalBlockEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.AxeItem;
@@ -19,6 +18,9 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 @Mixin(AxeItem.class)
 public class AxeItemMixin {
@@ -37,15 +39,34 @@ public class AxeItemMixin {
 		Block strippedBlock = StrippableCustomRegistry.getStrippedResult(block);
 
 		if (strippedBlock != null){
-			BlockEntity blockEntity = world.getBlockEntity(pos);
 
 			if (StrippableBlocksAPI.isPedestalsLoaded) {
-				if (blockEntity instanceof PedestalBlockEntity pedestalBlockEntity) {
-					ItemStack currentItem = pedestalBlockEntity.getStoredItem();
-					world.setBlockState(pos, strippedBlock.getDefaultState(), 3);
-					PedestalBlockEntity newPedestalBlockEntity = (PedestalBlockEntity) world.getBlockEntity(pos);
-					assert newPedestalBlockEntity != null;
-					newPedestalBlockEntity.setStoredItem(currentItem);
+
+				BlockEntity blockEntity = world.getBlockEntity(pos);
+				try {
+					// Use reflection to check for the class existence
+					Class<?> pedestalClass = Class.forName("net.chris.pedestals.PedestalBlockEntity");
+
+					if (pedestalClass.isInstance(blockEntity)) {
+						// If the block entity is a PedestalBlockEntity, perform the stripping logic
+						Method getStoredItem = pedestalClass.getDeclaredMethod("getStoredItem");
+						ItemStack currentItem = (ItemStack) getStoredItem.invoke(blockEntity);
+
+						// Change the block state to the stripped version
+						world.setBlockState(pos, strippedBlock.getDefaultState(), 3);
+
+						// Retrieve the new block entity and set the item back
+						BlockEntity newBlockEntity = world.getBlockEntity(pos);
+						if (newBlockEntity != null && pedestalClass.isInstance(newBlockEntity)) {
+							Method setStoredItem = pedestalClass.getDeclaredMethod("setStoredItem", ItemStack.class);
+							setStoredItem.invoke(newBlockEntity, currentItem);
+						}
+					}
+				} catch (ClassNotFoundException e) {
+					// This should only happen if the Pedestals mod is not loaded
+					StrippableBlocksAPI.LOGGER.warn("PedestalBlockEntity class not found. Ensure Pedestals mod is correctly loaded.");
+				} catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+					StrippableBlocksAPI.LOGGER.error("Failed to interact with PedestalBlockEntity via reflection.", e);
 				}
 			} else {
 				world.setBlockState(pos, strippedBlock.getDefaultState(), 3);
