@@ -46,7 +46,7 @@ public class AxeItemMixin {
 				BlockEntity blockEntity = world.getBlockEntity(pos);
 				try {
 					// Use reflection to check for the class existence
-					Class<?> pedestalClass = Class.forName("com.strippableblocksapi.pedestals.PedestalBlockEntity");
+					Class<?> pedestalClass = Class.forName("net.chris.pedestals.block.entity.PedestalBlockEntity");
 
 					if (pedestalClass.isInstance(blockEntity)) {
 						// If the block entity is a PedestalBlockEntity, perform the stripping logic
