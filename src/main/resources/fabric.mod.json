@@ -3,7 +3,7 @@
 	"id": "strippableblocksapi",
 	"version": "1.0.0",
 	"name": "StrippableBlocksAPI",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "An API to allow registration of strippable blocks that do not have an axis property.",
 	"authors": [
 		"Me!"
 	],
