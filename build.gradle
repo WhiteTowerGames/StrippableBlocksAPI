@@ -24,7 +24,7 @@ dependencies {
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-	//modCompileOnly "curse.maven:pedestals-display-your-items-1200544:${project.pedestals_version}"
+	modCompileOnly "curse.maven:pedestals-display-your-items-1200544:${project.pedestals_version}"
 	//modRuntimeOnly "curse.maven:pedestals-display-your-items-1200544:${project.pedestals_version}"
 	
 }

@@ -2,6 +2,7 @@ package com.strippableblocksapi.mixin;
 
 import com.strippableblocksapi.StrippableBlocksAPI;
 import com.strippableblocksapi.StrippableCustomRegistry;
+import net.chris.pedestals.block.entity.PedestalBlockEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.AxeItem;
@@ -43,32 +44,14 @@ public class AxeItemMixin {
 
             if (StrippableBlocksAPI.isPedestalsLoaded) {
 
-				BlockEntity blockEntity = world.getBlockEntity(pos);
-				try {
-					// Use reflection to check for the class existence
-					Class<?> pedestalClass = Class.forName("net.chris.pedestals.block.entity.PedestalBlockEntity");
+				PedestalBlockEntity pedestalBlockEntity = (PedestalBlockEntity) world.getBlockEntity(pos);
+                assert pedestalBlockEntity != null;
+                ItemStack stack = pedestalBlockEntity.getStoredItem();
+				world.setBlockState(pos, strippedBlock.getDefaultState(), 3);
+				pedestalBlockEntity = (PedestalBlockEntity) world.getBlockEntity(pos);
+                assert pedestalBlockEntity != null;
+                pedestalBlockEntity.setStoredItem(stack);
 
-					if (pedestalClass.isInstance(blockEntity)) {
-						// If the block entity is a PedestalBlockEntity, perform the stripping logic
-						Method getStoredItem = pedestalClass.getDeclaredMethod("getStoredItem");
-						ItemStack currentItem = (ItemStack) getStoredItem.invoke(blockEntity);
-
-						// Change the block state to the stripped version
-						world.setBlockState(pos, strippedBlock.getDefaultState(), 3);
-
-						// Retrieve the new block entity and set the item back
-						BlockEntity newBlockEntity = world.getBlockEntity(pos);
-						if (pedestalClass.isInstance(newBlockEntity)) {
-							Method setStoredItem = pedestalClass.getDeclaredMethod("setStoredItem", ItemStack.class);
-							setStoredItem.invoke(newBlockEntity, currentItem);
-						}
-					}
-				} catch (ClassNotFoundException e) {
-					// This should only happen if the Pedestals mod is not loaded
-					StrippableBlocksAPI.LOGGER.warn("PedestalBlockEntity class not found. Ensure Pedestals mod is correctly loaded.");
-				} catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-					StrippableBlocksAPI.LOGGER.error("Failed to interact with PedestalBlockEntity via reflection.", e);
-				}
             } else {
 				world.setBlockState(pos, strippedBlock.getDefaultState(), 3);
 			}
