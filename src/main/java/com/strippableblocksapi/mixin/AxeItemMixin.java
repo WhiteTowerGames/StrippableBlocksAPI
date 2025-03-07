@@ -58,7 +58,7 @@ public class AxeItemMixin {
 
 						// Retrieve the new block entity and set the item back
 						BlockEntity newBlockEntity = world.getBlockEntity(pos);
-						if (newBlockEntity != null && pedestalClass.isInstance(newBlockEntity)) {
+						if (pedestalClass.isInstance(newBlockEntity)) {
 							Method setStoredItem = pedestalClass.getDeclaredMethod("setStoredItem", ItemStack.class);
 							setStoredItem.invoke(newBlockEntity, currentItem);
 						}
