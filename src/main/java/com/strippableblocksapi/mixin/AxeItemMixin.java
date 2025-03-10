@@ -5,7 +5,6 @@ import com.strippableblocksapi.StrippableCustomRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.AxeItem;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
@@ -46,21 +45,9 @@ public class AxeItemMixin {
 				try {
 					// Use reflection to check for the class existence
 					Class<?> pedestalClass = Class.forName("net.chris.pedestals.block.entity.PedestalBlockEntity");
-
 					if (pedestalClass.isInstance(blockEntity)) {
-						// If the block entity is a PedestalBlockEntity, perform the stripping logic
-						Method getStoredItem = pedestalClass.getDeclaredMethod("getStoredItem");
-						ItemStack currentItem = (ItemStack) getStoredItem.invoke(blockEntity);
-
-						// Change the block state to the stripped version
-						world.setBlockState(pos, strippedBlock.getDefaultState(), 3);
-
-						// Retrieve the new block entity and set the item back
-						BlockEntity newBlockEntity = world.getBlockEntity(pos);
-						if (newBlockEntity != null && pedestalClass.isInstance(newBlockEntity)) {
-							Method setStoredItem = pedestalClass.getDeclaredMethod("setStoredItem", ItemStack.class);
-							setStoredItem.invoke(newBlockEntity, currentItem);
-						}
+						Method transferAllInventories = pedestalClass.getDeclaredMethod("transferAllInventories", World.class, BlockPos.class, Block.class);
+						transferAllInventories.invoke(blockEntity, world, pos, strippedBlock);
 					}
 				} catch (ClassNotFoundException e) {
 					// This should only happen if the Pedestals mod is not loaded
