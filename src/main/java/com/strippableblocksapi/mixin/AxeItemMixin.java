@@ -38,6 +38,7 @@ public class AxeItemMixin {
 		if (strippedBlock != null) {
 			world.setBlockState(pos, strippedBlock.getDefaultState(), 3);
 			world.playSound(null, pos, getStripSound(), SoundCategory.BLOCKS, 1.0F, 1.0F);
+			context.getStack().damage(1, context.getPlayer());
 			cir.setReturnValue(ActionResult.SUCCESS);
 		}
 	}
