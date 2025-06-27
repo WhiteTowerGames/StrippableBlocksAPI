@@ -1,6 +1,7 @@
 package com.strippableblocksapi.mixin;
 
 import com.strippableblocksapi.StrippableCustomRegistry;
+import com.strippableblocksapi.inventory.InventoryPreservingBlock;
 import net.minecraft.block.Block;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.ItemUsageContext;
@@ -35,11 +36,16 @@ public class AxeItemMixin {
 
 		Block strippedBlock = StrippableCustomRegistry.getStrippedResult(block);
 
-		if (strippedBlock != null) {
-			world.setBlockState(pos, strippedBlock.getDefaultState(), 3);
-			world.playSound(null, pos, getStripSound(), SoundCategory.BLOCKS, 1.0F, 1.0F);
-			context.getStack().damage(1, context.getPlayer());
-			cir.setReturnValue(ActionResult.SUCCESS);
+		if (strippedBlock == null) return;
+
+        world.playSound(null, pos, getStripSound(), SoundCategory.BLOCKS, 1.0F, 1.0F);
+        context.getStack().damage(1, context.getPlayer());
+
+		if (block instanceof InventoryPreservingBlock inventoryPreservingBlock) {
+			inventoryPreservingBlock.onStripped(world, pos, strippedBlock.getDefaultState());
 		}
-	}
+
+        world.setBlockState(pos, strippedBlock.getDefaultState(), 3);
+        cir.setReturnValue(ActionResult.SUCCESS);
+    }
 }
