@@ -43,6 +43,11 @@ public class AxeItemMixin {
 
 		if (block instanceof InventoryPreservingBlock inventoryPreservingBlock) {
 			inventoryPreservingBlock.onStripped(world, pos, strippedBlock.getDefaultState());
+			if (world.getBlockState(pos).isOf(strippedBlock)) {
+				world.setBlockState(pos, strippedBlock.getDefaultState(), 3);
+			}
+			cir.setReturnValue(ActionResult.SUCCESS);
+			return;
 		}
 
         world.setBlockState(pos, strippedBlock.getDefaultState(), 3);
